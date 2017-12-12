@@ -64,8 +64,16 @@ public class ClientConsole {
         while (true) {
             try {
                 //nasluchiwanie odpowiedzi serwera
-                response = input.readLine();
-                System.out.println(response);
+                 response = input.readLine();
+                if(response.equals("Your Turn")) {
+                    System.out.println("Your Turn, Move!");
+                    output.println(inputLine.readLine());
+                }
+                else if(response.startsWith("U")) {
+                    System.out.println("Board changed !" + response);
+                }
+                else
+                    System.out.println(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }

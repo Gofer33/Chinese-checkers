@@ -43,6 +43,34 @@ public class Game {
 
     public void start ()
     {
+        board.initialize(playersNumber);
+    if(playersNumber == 2)
+    {
+        players.get(0).setMark('Y');
+        players.get(1).setMark('R');
+    }
+    else if(playersNumber == 3)
+    {
+        players.get(0).setMark('Y');
+        players.get(1).setMark('P');
+        players.get(2).setMark('B');
+    }
+    else if(playersNumber == 4)
+    {
+        players.get(0).setMark('G');
+        players.get(1).setMark('P');
+        players.get(2).setMark('L');
+        players.get(3).setMark('B');
+    }
+    else if(playersNumber == 6)
+    {
+        players.get(0).setMark('Y');
+        players.get(1).setMark('G');
+        players.get(2).setMark('P');
+        players.get(3).setMark('R');
+        players.get(4).setMark('B');
+        players.get(5).setMark('L');
+    }
         this.isStarted = true;
     }
 
