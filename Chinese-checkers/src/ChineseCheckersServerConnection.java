@@ -9,7 +9,7 @@ import java.util.ArrayList;
 //TODO close sockets
 public class ChineseCheckersServerConnection {
 
-    static final int PORT = 1978;
+    static final int PORT = 1980;
 
     public static void main(String[] args){
         ServerSocket serverSocket = null;

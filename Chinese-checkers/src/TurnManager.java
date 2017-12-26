@@ -27,8 +27,9 @@ public class TurnManager {
         return players.get(playerTurn);
     }
 
+
     public void resetTurn ()
     {
-        playerTurn = generator.nextInt(players.size());
+        playerTurn = generator.nextInt(players.size())+1;
     }
 }
