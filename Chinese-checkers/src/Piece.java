@@ -4,12 +4,14 @@
 public class Piece {
     int x;
     int y;
+    boolean done;
 
 
     Piece(int x,int y)
     {
         this.x = x;
         this.y = y;
+        done = false;
     }
 
     void setX(int x)
@@ -22,7 +24,12 @@ public class Piece {
         this.y = y;
     }
 
-
+    Piece getByPosition(int x, int y)
+    {
+        if (this.x == x && this.y ==y)
+            return this;
+        else return null;
+    }
 
     int getX()
     {
@@ -32,5 +39,15 @@ public class Piece {
     int getY()
     {
         return this.y;
+    }
+
+    boolean getDone()
+    {
+        return this.done;
+    }
+
+    void setDone(boolean done)
+    {
+        this.done = done;
     }
 }

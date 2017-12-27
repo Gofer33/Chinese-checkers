@@ -47,29 +47,44 @@ public class Game {
     if(playersNumber == 2)
     {
         players.get(0).setMark('Y');
+        //players.get(0).setOppositeMark('R');
         players.get(1).setMark('R');
+       // players.get(1).setOppositeMark('Y');
     }
     else if(playersNumber == 3)
     {
         players.get(0).setMark('Y');
+        //players.get(0).setOppositeMark('R');
         players.get(1).setMark('P');
+        //players.get(1).setOppositeMark('L');
         players.get(2).setMark('B');
+        //players.get(2).setOppositeMark('G');
     }
     else if(playersNumber == 4)
     {
         players.get(0).setMark('G');
+        //players.get(0).setOppositeMark('B');
         players.get(1).setMark('P');
+        //players.get(1).setOppositeMark('L');
         players.get(2).setMark('L');
+        //players.get(2).setOppositeMark('P');
         players.get(3).setMark('B');
+        //players.get(3).setOppositeMark('G');
     }
     else if(playersNumber == 6)
     {
         players.get(0).setMark('Y');
+       // players.get(0).setOppositeMark('R');
         players.get(1).setMark('G');
+        //players.get(1).setOppositeMark('B');
         players.get(2).setMark('P');
+        //players.get(2).setOppositeMark('L');
         players.get(3).setMark('R');
+        //players.get(3).setOppositeMark('Y');
         players.get(4).setMark('B');
+       // players.get(4).setOppositeMark('G');
         players.get(5).setMark('L');
+       // players.get(5).setOppositeMark('P');
     }
         this.isStarted = true;
     }

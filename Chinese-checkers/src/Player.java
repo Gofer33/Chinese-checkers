@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 /**
  * Created by Damian Borek on 27/11/2017.
@@ -13,4 +14,5 @@ public interface Player {
     public char getOppositeMark();
     public void setMark(char mark);
     public void setOppositeMark(char mark);
+    public ArrayList<Piece> getPieces();
 }
