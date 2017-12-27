@@ -12,6 +12,16 @@ public class GamesManager {
         games = new ArrayList<Game>();
     }
 
+    public Game getGameByName (String name)
+    {
+        for(int i=0 ; i<games.size() ; i++)
+        {
+            if(name.equals(games.get(i).getTableName()))
+                return games.get(i);
+        }
+        return null;
+    }
+
     public static GamesManager getInstance()
     {
         if (instance == null)

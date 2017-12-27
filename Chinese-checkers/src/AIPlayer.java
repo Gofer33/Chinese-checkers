@@ -9,20 +9,32 @@ public class AIPlayer implements Player {
     char mark;
     char oppositeMark;
     public ArrayList<Piece> pieces;
-    int room;
+    String tableName;
     String name;
 
-    AIPlayer(String name, int room)
+    AIPlayer(String name, String tableName)
     {
         this.name = name;
-        this.room = room;
+        this.tableName = tableName;
     }
 
     @Override
     public void move() {
+        String outcome;
+        System.out.println ("[NAME] = " + name + " [MARK] = " + mark + " [ROOM] = " + tableName +  " WYKONUJE RUCH");
+        outcome = GamesManager.getInstance().getGameByName(tableName).board.AIMove(pieces, mark);
+        update(outcome);
+    }
 
-        System.out.println ("[NAME] = " + name + " [MARK] = " + mark + " [ROOM] = " + room +  " WYKONUJE RUCH");
-        GamesManager.getInstance().games.get(room).board.AIMove(pieces, mark);
+    private void update(String msg)
+    {
+        String[] splitStr = msg.split("\\s+");
+        for(int i=0;i<splitStr.length ; i++)
+        {
+            for(int j =0 ; j<GamesManager.getInstance().getGameByName(tableName).players.size(); j++)
+                if(GamesManager.getInstance().getGameByName(tableName).players.get(j) instanceof HumanPlayer)
+                    GamesManager.getInstance().getGameByName(tableName).players.get(j).getOutput().println("U" + splitStr[i]);
+        }
 
     }
 
@@ -68,7 +80,7 @@ public class AIPlayer implements Player {
     }
 
     public void setPieces() {
-        pieces = GamesManager.getInstance().games.get(room).board.setPieces(mark);
+        pieces = GamesManager.getInstance().getGameByName(tableName).board.setPieces(mark);
     }
 
     public ArrayList<Piece> getPieces()
@@ -76,13 +88,14 @@ public class AIPlayer implements Player {
         return this.pieces;
     }
 
-    public int getRoom()
+    public String getRoom()
     {
-        return this.room;
+        return this.tableName;
     }
 
-    public void setRoom(int room)
+    public void setRoom(String room)
     {
-        this.room = room;
+        this.tableName = room;
     }
+
 }
