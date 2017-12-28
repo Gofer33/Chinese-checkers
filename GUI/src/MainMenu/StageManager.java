@@ -40,7 +40,7 @@ public class StageManager extends Application {
         stage.setScene(mainScene);
         stage.show();
     }
-    public static void launcher(){
+    public static void launcher() {
         launch();
     }
 }

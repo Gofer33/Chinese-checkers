@@ -41,7 +41,7 @@ public class FirstMenu {
         ImageView imageView;
 
         /**********BACKGROUND**********/
-        background = new Image(new FileInputStream("GUI\\resources\\Background.png"));
+        background = new Image(new FileInputStream("GUI\\resources\\MenuBackground.png"));
         imageView = new ImageView(background);
         imageView.setX(0);
         imageView.setY(100);
