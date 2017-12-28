@@ -21,7 +21,7 @@ public class Game {
         Stage stage;
         Image background;
         ImageView imageView;
-        Group root = null;
+        GroupContainer root = new GroupContainer();
 
         /**********BACKGROUND**********/
         try{
@@ -31,7 +31,7 @@ public class Game {
             imageView.setY(0);
             imageView.setFitHeight(620);
             imageView.setFitWidth(620);
-            root = new Group(imageView);
+            root.boardBackground = new Group(imageView);
         }
         catch(FileNotFoundException e){
             System.out.println("File not found");
@@ -42,12 +42,15 @@ public class Game {
         stage = new Stage();
         stage.setResizable(false);
         stage.setTitle("Chinese Checkers");
-        if(root == null) root = new Group();
-
+        if(root == null) root.boardBackground = new Group();
+        root.mainRoot.getChildren().add(root.boardBackground);
 
         //Creating a scene object
-        Scene mainScene = new Scene(root, 600, 600);
+        Scene mainScene = new Scene(root.mainRoot, 600, 600);
         mainScene.setFill(Color.BLUE);
+
+        MapDisplay mapDisplay = new MapDisplay(root);
+        mapDisplay.run();
 
 
 
