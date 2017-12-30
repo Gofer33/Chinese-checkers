@@ -27,7 +27,7 @@ import javafx.event.EventHandler;
 
 public class RoomMenuHeader {
 
-    public RoomMenuHeader(GroupContainer root) throws FileNotFoundException {
+    public RoomMenuHeader(GroupContainer root, ConnectionManager connectionManager) throws FileNotFoundException {
 
         /**********DECLARATIONS**********/
         Text t_nickname;

@@ -58,16 +58,19 @@ public class HumanPlayer extends Thread implements Player {
                     if(AIPlayers + humanPlayers > 6 || AIPlayers + humanPlayers <= 1 || humanPlayers == 0 || AIPlayers + humanPlayers == 5)
                     {
                         displayErrorMsg(output, "Wrong ammount of players!");
+                        System.out.println("Wrong ammount of players!");
                         break;
                     }
                     if(tableName.equals(""))
                     {
                         displayErrorMsg(output, "Table Name can't be empty!");
+                        System.out.println("Table Name can't be empty!");
                         break;
                     }
                     if(createNewGame(humanPlayers, AIPlayers, tableName) == 0)
                     {
                         displayErrorMsg(output, "Game couldn't be created!");
+                        System.out.println("Game couldn't be created!");
                         break;
                     }
                     else

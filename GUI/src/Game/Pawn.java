@@ -25,10 +25,11 @@ public class Pawn {
         "-fx-min-width: 30px; " +
                 "-fx-min-height: 30px; " +
                 "-fx-max-width: 30px; " +
-                "-fx-max-height: 30px; "
+                "-fx-max-height: 30px; -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;"
                 ;
 
         switch (type){
+            case '#' : tmp += "-fx-background-color: rgba(255,255,255,0.8);"; break;
             case 'Y' : tmp += "-fx-background-color: rgba(255,255,0,0.8);"; break;
             case 'L' : tmp += "-fx-background-color: rgba(0,255,255,0.8);"; break;
             case 'G' : tmp += "-fx-background-color: rgba(0,255,0,0.8);"; break;

@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
  * Created by Kamil on 2017-12-27.
  */
 public class CreateRoomMenu {
-    CreateRoomMenu(GroupContainer root){
+    CreateRoomMenu(GroupContainer root, ConnectionManager connectionManager){
 
         /**********DECLARATIONS**********/
         Text t_room_name;
