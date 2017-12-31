@@ -5,15 +5,13 @@ public class Piece {
     int x;
     int y;
     boolean done;
-    boolean inZone;
 
 
     Piece(int x,int y)
     {
         this.x = x;
         this.y = y;
-        this.done = false;
-        this.inZone = false;
+        done = false;
     }
 
     void setX(int x)
@@ -51,15 +49,5 @@ public class Piece {
     void setDone(boolean done)
     {
         this.done = done;
-    }
-
-    boolean getInZone()
-    {
-        return this.inZone;
-    }
-
-    void setInZone(boolean inZone)
-    {
-        this.inZone=inZone;
     }
 }

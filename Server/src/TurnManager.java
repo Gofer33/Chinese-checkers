@@ -23,54 +23,13 @@ public class TurnManager {
     public Player next ()
     {
         playerTurn = (playerTurn + 1)%(players.size());
-        update(playerTurn);
-        System.out.println(players.get(playerTurn).getName_() + "'S TURN!");
-        while(players.get(playerTurn) instanceof AIPlayer)
-        {
-            botTurn((AIPlayer)players.get(playerTurn));
-            playerTurn = (playerTurn + 1)%(players.size());
-            update(playerTurn);
-        }
-
+        System.out.println(players.size() +" "+playerTurn);
         return players.get(playerTurn);
     }
 
 
     public void resetTurn ()
     {
-        playerTurn = generator.nextInt(players.size());
-        System.out.println(players.get(playerTurn).getName_() + "'S TURN! " + "MARK " + players.get(playerTurn).getMark());
-        update(playerTurn);
-        while(players.get(playerTurn) instanceof AIPlayer)
-        {
-            botTurn((AIPlayer) players.get(playerTurn));
-            playerTurn = (playerTurn + 1)%(players.size());
-            update(playerTurn);
-        }
-    }
-
-    private void update(int playerTurn)
-    {
-        for(int i=0;i<players.size();i++)
-        {
-            if(i==playerTurn && players.get(i) instanceof HumanPlayer)
-                players.get(i).getOutput().println("Your Turn!");
-            else if(players.get(i) instanceof HumanPlayer)
-                players.get(i).getOutput().println(players.get(playerTurn).getName_() + "'S TURN!");
-        }
-    }
-
-    private void botTurn(AIPlayer player)
-    {
-        player.move();
-        if(GamesManager.getInstance().getGameByName(player.getRoom()).board.checkWinCondition(player.getPieces(), player.getMark()))
-        {
-            System.out.printf("BOT " + GamesManager.getInstance().getGameByName(player.getRoom()).turn.current().getMark() + " WYGRAL!");
-            try {
-                Thread.sleep(50000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        playerTurn = generator.nextInt(players.size())+1;
     }
 }
