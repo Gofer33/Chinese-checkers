@@ -15,4 +15,6 @@ public interface Player {
     public void setMark(char mark);
     public void setOppositeMark(char mark);
     public ArrayList<Piece> getPieces();
+    public boolean getWin();
+    public void setWin(boolean win);
 }

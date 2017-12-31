@@ -130,7 +130,7 @@ public class Board {
 
     public int move(Piece piece, int newX, int newY, char mark, boolean onlyJump)
     {
-        int valid = valid(piece.getX(), piece.getY(), newX, newY, onlyJump);
+        int valid = valid(piece, newX, newY, onlyJump, mark);
             if(valid == 1 || valid == 2 )
             {
                 if(valid == 2)
@@ -139,50 +139,96 @@ public class Board {
                     System.out.println("NOT JUMPED!");
                 boardArray[newX][newY] = mark;
                 boardArray[piece.getX()][piece.getY()] = '#';
+                if(piece.getInZone() == false)
+                    piece.setInZone(checkIfEnterZone(piece, newX, newY, mark));
                 piece.setX(newX);
                 piece.setY(newY);
-                if(valid == 2 && isValidMove(newX,newY))
+                if(valid == 2 && isValidMove(piece, mark))
                     return 2;
                 return 1;
             }
-
-
         return 0;
     }
-    private boolean isValidMove(int x, int y)
+
+    int[][] getOppositeZone(char mark)
     {
-        if(x+2 < 19)
-        if(jump(x,y,x+2,y) && boardArray[x+2][y] == '#')
+        if (mark == 'Y')
+            return RZone;
+        else if(mark == 'R')
+            return YZone;
+        else if(mark == 'B')
+            return GZone;
+        else if(mark == 'G')
+            return BZone;
+        else if(mark == 'P')
+            return LZone;
+        else if(mark == 'L')
+            return PZone;
+        else
+            return null;
+    }
+
+    private boolean checkIfEnterZone(Piece piece, int newX, int newY, char mark)
+    {
+        int zone[][] = getOppositeZone(mark);
+        for(int i = 0;i<10;i++) {
+            if((piece.getX() == zone[i][0] && piece.getY() == zone[i][1]) || (newX == zone[i][0] && newY == zone[i][1]))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean leaveZone(Piece piece, int newX, int newY, char mark)
+    {
+        int[][] zone = getOppositeZone(mark);
+        boolean inZone = false;
+        if(piece.getInZone() == true)
+        {
+            for(int i=0;i<10;i++)
+            {
+                if(newX == zone[i][0] && newY == zone[i][1])
+                    inZone = true;
+            }
+            if(inZone)
+                return false;
+            else
+                return true;
+        }
+        else
+            return false;
+    }
+
+    private boolean isValidMove(Piece piece, char mark)
+    {
+        if(piece.getX()+2 < 19)
+        if(jump(piece.getX(),piece.getY(),piece.getX()+2,piece.getY()) && boardArray[piece.getX()+2][piece.getY()] == '#' && !leaveZone(piece,piece.getX()+2,piece.getY(), mark))
             return true;
-        if(y+2 < 19)
-        if(jump(x,y,x,y+2) && boardArray[x][y+2] == '#')
+        if(piece.getY()+2 < 19)
+        if(jump(piece.getX(),piece.getY(),piece.getX(),piece.getY()+2) && boardArray[piece.getX()][piece.getY()+2] == '#' && !leaveZone(piece,piece.getX(),piece.getY()+2, mark))
             return true;
-        if(y-2 > -1)
-        if(jump(x,y,x,y-2) && boardArray[x][y-2] == '#')
+        if(piece.getY()-2 > -1)
+        if(jump(piece.getX(),piece.getY(),piece.getX(),piece.getY()-2) && boardArray[piece.getX()][piece.getY()-2] == '#' && !leaveZone(piece,piece.getX(),piece.getY()-2, mark))
             return true;
-        if(x-2 > -1)
-        if(jump(x,y,x-2,y) && boardArray[x-2][y] == '#')
+        if(piece.getX()-2 > -1)
+        if(jump(piece.getX(),piece.getY(),piece.getX()-2,piece.getY()) && boardArray[piece.getX()-2][piece.getY()] == '#' && !leaveZone(piece,piece.getX()-2,piece.getY(), mark))
             return true;
-        if(x-2 > -1 && y+2 < 19)
-        if(jump(x,y,x-2,y+2) && boardArray[x-2][y+2] == '#')
+        if(piece.getX()-2 > -1 && piece.getY()+2 < 19)
+        if(jump(piece.getX(),piece.getY(),piece.getX()-2,piece.getY()+2) && boardArray[piece.getX()-2][piece.getY()+2] == '#' && !leaveZone(piece,piece.getX()-2,piece.getY()+2, mark))
             return true;
-        if(x+2 < 19 && y-2 > -1)
-        if(jump(x,y,x+2,y-2) && boardArray[x+2][y-2] == '#')
+        if(piece.getX()+2 < 19 && piece.getY()-2 > -1)
+        if(jump(piece.getX(),piece.getY(),piece.getX()+2,piece.getY()-2) && boardArray[piece.getX()+2][piece.getY()-2] == '#' && !leaveZone(piece,piece.getX()+2,piece.getY()-2, mark))
             return true;
         return false;
     }
-    private int valid(int oldX, int oldY, int newX, int newY, boolean onlyJump)
+    private int valid(Piece piece, int newX, int newY, boolean onlyJump, char mark)
     {
-        System.out.println("Dystans ruchu: "+ distance(oldX, oldY, newX, newY) + " " + jump(oldX, oldY, newX, newY));
-        if(boardArray[newX][newY] != '#')
+        if(boardArray[newX][newY] != '#' || leaveZone(piece, newX, newY, mark))
             return 0;
-        if(distance(oldX, oldY, newX, newY) == 1 && onlyJump == false)
+        if(distance(piece.getX(), piece.getY(), newX, newY) == 1 && onlyJump == false)
             return 1;
-        else if((distance(oldX, oldY, newX, newY) == 2) && jump(oldX, oldY, newX, newY))
+        else if((distance(piece.getX(), piece.getY(), newX, newY) == 2) && jump(piece.getX(), piece.getY(), newX, newY))
             return 2;
-
         else {
-            System.out.println("Dystans nie taki");
             return 0;
         }
     }
@@ -315,7 +361,7 @@ public class Board {
         return abs(x2-x1) + abs(y2-y1) - dif;
     }
 
-    int[] checkOptions(Piece piece, int destX, int destY, int onlyJump)
+    int[] checkOptions(Piece piece, int destX, int destY, int onlyJump, char mark)
     {
         int oldDist = 0;
         int d = 500;
@@ -325,7 +371,7 @@ public class Board {
         int jump = 0;
         oldDist = dist(piece.getX(),piece.getY(), destX, destY);
 
-        if(boardArray[piece.getX()+1][piece.getY()] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()+1][piece.getY()] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX()+1, piece.getY(), mark))
         {
             tmpD = dist(piece.getX() + 1, piece.getY(), destX, destY);
             if (tmpD <= d) {
@@ -334,7 +380,7 @@ public class Board {
                 bestY = piece.getY();
             }
         }
-        if(boardArray[piece.getX()-1][piece.getY()] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()-1][piece.getY()] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX()-1, piece.getY(), mark))
         {
             tmpD = dist(piece.getX() - 1, piece.getY(), destX, destY);
             if (tmpD <= d) {
@@ -343,7 +389,7 @@ public class Board {
                 bestY = piece.getY();
             }
         }
-        if(boardArray[piece.getX()][piece.getY() + 1] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()][piece.getY() + 1] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX(), piece.getY()+1, mark))
         {
             tmpD = dist(piece.getX(), piece.getY() + 1, destX, destY);
             if (tmpD <= d) {
@@ -352,7 +398,7 @@ public class Board {
                 bestY = piece.getY() + 1;
             }
         }
-        if(boardArray[piece.getX()][piece.getY()-1] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()][piece.getY()-1] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX(), piece.getY()-1, mark))
         {
             tmpD = dist(piece.getX(), piece.getY() - 1, destX, destY);
             if (tmpD <= d) {
@@ -361,7 +407,7 @@ public class Board {
                 bestY = piece.getY() - 1;
             }
         }
-        if(boardArray[piece.getX()+1][piece.getY()-1] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()+1][piece.getY()-1] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX()+1, piece.getY()-1, mark))
         {
             tmpD = dist(piece.getX() + 1, piece.getY() - 1, destX, destY);
             if (tmpD <= d) {
@@ -370,7 +416,7 @@ public class Board {
                 bestY = piece.getY() - 1;
             }
         }
-        if(boardArray[piece.getX()-1][piece.getY()+1] == '#' && onlyJump == 0)
+        if(boardArray[piece.getX()-1][piece.getY()+1] == '#' && onlyJump == 0 && !leaveZone(piece, piece.getX()-1, piece.getY()+1, mark))
         {
             tmpD = dist(piece.getX() - 1, piece.getY() + 1, destX, destY);
             if (tmpD <= d) {
@@ -380,7 +426,7 @@ public class Board {
             }
         }
         if(piece.getX() + 2 < 19)
-        if(boardArray[piece.getX()+2][piece.getY()] == '#' && boardArray[piece.getX()+1][piece.getY()] != '#' && boardArray[piece.getX()+1][piece.getY()] != '.')
+        if(boardArray[piece.getX()+2][piece.getY()] == '#' && boardArray[piece.getX()+1][piece.getY()] != '#' && boardArray[piece.getX()+1][piece.getY()] != '.' && !leaveZone(piece, piece.getX()+2, piece.getY(), mark))
         {
             tmpD = dist(piece.getX() + 2, piece.getY(), destX, destY);
             if (tmpD <= d) {
@@ -391,7 +437,7 @@ public class Board {
             }
         }
         if(piece.getX() - 2 > -1)
-        if(boardArray[piece.getX()-2][piece.getY()] == '#' && boardArray[piece.getX()-1][piece.getY()] != '#'&& boardArray[piece.getX()-1][piece.getY()] != '.')
+        if(boardArray[piece.getX()-2][piece.getY()] == '#' && boardArray[piece.getX()-1][piece.getY()] != '#'&& boardArray[piece.getX()-1][piece.getY()] != '.' && !leaveZone(piece, piece.getX()-2, piece.getY(), mark))
         {
             tmpD = dist(piece.getX() - 2, piece.getY(), destX, destY);
             if (tmpD <= d) {
@@ -402,7 +448,7 @@ public class Board {
             }
         }
         if(piece.getY() + 2 < 19)
-        if(boardArray[piece.getX()][piece.getY()+2] == '#' && boardArray[piece.getX()][piece.getY()+1] != '#'&& boardArray[piece.getX()][piece.getY()+1] != '.')
+        if(boardArray[piece.getX()][piece.getY()+2] == '#' && boardArray[piece.getX()][piece.getY()+1] != '#'&& boardArray[piece.getX()][piece.getY()+1] != '.' && !leaveZone(piece, piece.getX(), piece.getY()+2, mark))
         {
             tmpD = dist(piece.getX(), piece.getY() + 2, destX, destY);
             if (tmpD <= d) {
@@ -413,7 +459,7 @@ public class Board {
             }
         }
         if(piece.getY() - 2 > -1)
-        if(boardArray[piece.getX()][piece.getY()-2] == '#' && boardArray[piece.getX()][piece.getY()-1] != '#'&& boardArray[piece.getX()][piece.getY()-1] != '.')
+        if(boardArray[piece.getX()][piece.getY()-2] == '#' && boardArray[piece.getX()][piece.getY()-1] != '#'&& boardArray[piece.getX()][piece.getY()-1] != '.' && !leaveZone(piece, piece.getX(), piece.getY()-2, mark))
         {
             tmpD = dist(piece.getX(), piece.getY() - 2, destX, destY);
             if (tmpD <= d) {
@@ -424,7 +470,7 @@ public class Board {
             }
         }
         if(piece.getX() + 2 < 19 && piece.getY() - 2 > -1)
-        if(boardArray[piece.getX()+2][piece.getY()-2] == '#' && boardArray[piece.getX()+1][piece.getY()-1] != '#' && boardArray[piece.getX()+1][piece.getY()-1] != '.')
+        if(boardArray[piece.getX()+2][piece.getY()-2] == '#' && boardArray[piece.getX()+1][piece.getY()-1] != '#' && boardArray[piece.getX()+1][piece.getY()-1] != '.' && !leaveZone(piece, piece.getX()+2, piece.getY()-2, mark))
         {
             tmpD = dist(piece.getX() + 2, piece.getY() - 2, destX, destY);
             if (tmpD <= d) {
@@ -435,7 +481,7 @@ public class Board {
             }
         }
         if(piece.getX() - 2 > -1 && piece.getY() + 2 < 19)
-        if(boardArray[piece.getX()-2][piece.getY()+2] == '#' && boardArray[piece.getX()-1][piece.getY()+1] != '#' && boardArray[piece.getX()-1][piece.getY()+1] != '.')
+        if(boardArray[piece.getX()-2][piece.getY()+2] == '#' && boardArray[piece.getX()-1][piece.getY()+1] != '#' && boardArray[piece.getX()-1][piece.getY()+1] != '.' && !leaveZone(piece, piece.getX()-2, piece.getY()+2, mark))
         {
             tmpD = dist(piece.getX() - 2, piece.getY() + 2, destX, destY);
             if (tmpD <= d) {
@@ -451,8 +497,9 @@ public class Board {
 
     }
 
-    void AIMove(ArrayList<Piece> pieces, char mark)
+    String AIMove(ArrayList<Piece> pieces, char mark)
     {
+        String outcome="";
         int dest[][];
         if (mark == 'Y')
             dest = RZone;
@@ -495,7 +542,7 @@ public class Board {
             limit++;
             if(limit == 20)
                 break;
-        }while(checkOptions(pieces.get(piece), dest[done][0], dest[done][1], jump)[2] <= 0);
+        }while(checkOptions(pieces.get(piece), dest[done][0], dest[done][1], jump, mark)[2] <= 0);
 
         int result[] = {-1,-1,500,0};
         int newX=-1;
@@ -503,23 +550,37 @@ public class Board {
 
         do
         {
-            result = checkOptions(pieces.get(piece), dest[done][0], dest[done][1], jump);
+            result = checkOptions(pieces.get(piece), dest[done][0], dest[done][1], jump, mark);
             if(result[2]> 0 || limit == 20) {
                 limit = 0;
                 newX = result[0];
                 newY = result[1];
                 jump = result[3];
                 System.out.println("WYKONANO RUCH " +pieces.get(piece).getX() + " " + pieces.get(piece).getY() + " " + newX + " " + newY + "dys = " + result[2]);
-
+                String oX="",oY="",nX="",nY="";
+                if(pieces.get(piece).getX()<10)
+                    oX="0";
+                oX = oX + Integer.toString(pieces.get(piece).getX());
+                if(pieces.get(piece).getY()<10)
+                    oY="0";
+                oY=oY + Integer.toString(pieces.get(piece).getY());
+                if(newX<10)
+                    nX="0";
+                nX=nX + Integer.toString(newX);
+                if(newY<10)
+                    nY="0";
+                nY=nY + Integer.toString(newY);
+                outcome = outcome + oX + oY + nX + nY + " ";
                 boardArray[newX][newY] = mark;
                 boardArray[pieces.get(piece).getX()][pieces.get(piece).getY()] = '#';
                 pieces.get(piece).setX(newX);
                 pieces.get(piece).setY(newY);
 
-                //displayBoard();
+                displayBoard();
             }
             else break;
 
         }while(jump == 1);
+        return outcome;
     }
 }
