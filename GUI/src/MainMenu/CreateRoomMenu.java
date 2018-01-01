@@ -14,16 +14,19 @@ import javafx.scene.text.Text;
  * Created by Kamil on 2017-12-27.
  */
 public class CreateRoomMenu {
+    /**********DECLARATIONS**********/
+    private Text t_players;
+    private Button b_start;
+    private Button b_bot[];
+    private Button b_close[];
+    private Button b_state[];
+
     CreateRoomMenu(GroupContainer root, ConnectionManager connectionManager){
 
         /**********DECLARATIONS**********/
         Text t_room_name;
-        Text t_players;
         Button b_create;
         Button b_exit;
-        Button b_start;
-        Button b_bot[];
-        Button b_close[];
         TextField tf_room_name;
 
         /**********TEXTS**********/
@@ -37,7 +40,7 @@ public class CreateRoomMenu {
         //Setting positions
         t_room_name.setX(620);
         t_room_name.setY(30);
-        t_players.setX(620);
+        t_players.setX(920);
         t_players.setY(90);
 
         //Setting the text to be added.
@@ -54,10 +57,12 @@ public class CreateRoomMenu {
         b_exit = new Button("Exit");
         b_bot = new Button[6];
         b_close = new Button[6];
+        b_state = new Button[6];
         tf_room_name = new TextField();
 
         //Set texts
         for(int i = 0; i < 6; i++){
+            b_state[i] = new Button("Waiting...");
             b_bot[i] = new Button("Bot");
             b_close[i] = new Button("Close");
         }
@@ -65,14 +70,16 @@ public class CreateRoomMenu {
         //Setting positions
         b_create.setLayoutX(820);
         b_create.setLayoutY(40);
-        b_start.setLayoutX(820);
+        b_start.setLayoutX(1120);
         b_start.setLayoutY(360);
         b_exit.setLayoutX(620);
         b_exit.setLayoutY(360);
         for(int i = 0; i < 6; i++){
-            b_bot[i].setLayoutX(795);
+            b_state[i].setLayoutX(920);
+            b_state[i].setLayoutY(100 + i * 30);
+            b_bot[i].setLayoutX(1095);
             b_bot[i].setLayoutY(100 + i * 30);
-            b_close[i].setLayoutX(835);
+            b_close[i].setLayoutX(1135);
             b_close[i].setLayoutY(100 + i * 30);
         }
         tf_room_name.setLayoutX(620);
@@ -83,12 +90,22 @@ public class CreateRoomMenu {
         b_start.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 60px;");
         b_exit.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 60px;");
         for(int i = 0; i < 6; i++){
+            b_state[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 170px;");
             b_bot[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 35px;");
             b_close[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 45px;");
         }
         tf_room_name.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 180px;");
 
         //Setting handlers
+        b_create.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if(tf_room_name.getText().length() > 1) {
+                    connectionManager.createRoom(tf_room_name.getText());
+                    createRoom();
+                }
+            }
+        });
         b_start.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -109,8 +126,19 @@ public class CreateRoomMenu {
 
         /**********ROOT OPERATIONS**********/
         root.roomMenuHeader = new Group(t_room_name, t_players, b_create, b_start, b_exit, tf_room_name,
+                b_state[0], b_state[1], b_state[2], b_state[3], b_state[4], b_state[5],
                 b_bot[0], b_bot[1], b_bot[2], b_bot[3], b_bot[4], b_bot[5],
                 b_close[0], b_close[1], b_close[2], b_close[3], b_close[4], b_close[5]);
         root.menuElements.getChildren().add(root.roomMenuHeader);
+    }
+
+    private void createRoom(){
+        t_players.setLayoutX(620);
+        b_start.setLayoutX(820);
+        for(int i = 0; i < 6; i++){
+            b_state[i].setLayoutX(620);
+            b_bot[i].setLayoutX(795);
+            b_close[i].setLayoutX(835);
+        }
     }
 }

@@ -79,6 +79,7 @@ public class HumanPlayer extends Thread implements Player {
                 }
                 // show games with players
                 else if (line.charAt(0) == 'A') {
+                    System.out.println("AAAAAA!@#@!@#!@#");
                     sendOutput();
                 }
                 else if (line.charAt(0) == 'K') {
@@ -263,6 +264,7 @@ public class HumanPlayer extends Thread implements Player {
             }
             str = str + "*";
         }
+        System.out.println("Sys: " + str);
         output.println(str);
     }
     private void update(int oldX, int oldY, int newX, int newY)

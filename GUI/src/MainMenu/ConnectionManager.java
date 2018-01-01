@@ -22,7 +22,7 @@ public class ConnectionManager extends Thread{
     int makeConnection(String IP) {
         try {
             if (IP.length() > 0) {
-                socket = new Socket(IP, 1980);
+                socket = new Socket(IP, 1982);
                 in = new BufferedReader(new InputStreamReader( socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
                 return 0;
@@ -48,6 +48,10 @@ public class ConnectionManager extends Thread{
         return response;
     }
 
+    public void createRoom(String name) {
+        out.println("N60"+name);
+    }
+
  /*   public void run() {
     //    out.println("A");
         while (true) {
@@ -63,6 +67,6 @@ public class ConnectionManager extends Thread{
     }*/
 
     public void test(){
-        out.println("SZATAN^^^");
+        out.println("N24Pokoik");out.println("N13Room");out.println("N42Chata");
     }
 }

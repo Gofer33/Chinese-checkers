@@ -1,9 +1,13 @@
 package MainMenu;
 
+import com.sun.deploy.util.StringUtils;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -34,29 +38,44 @@ public class RoomMenuSlider {
 
         /**********DECLARATIONS**********/
         Button b_rooms[];
-        int amount = 6;
+        Button l_rooms[];
+        int amount;
 
         /**********BUTTONS**********/
-        b_rooms = new Button[amount];
-
-        connectionManager.test();
-
         String tmp = connectionManager.getRooms();
-        String[] array = tmp.split("\\|",-1);
+        amount = tmp.split("\\*",-1).length-1;
+        if(amount > 8)
+            amount = 8;
+
+        b_rooms = new Button[amount];
+        l_rooms = new Button[amount];
+
+        System.out.println(amount);
+        String[] list = tmp.split("\\*",-1);
+
+
 
         //Set texts
-        for(int i = 0; i < 6; i++){
-            b_rooms[i] = new Button(array[i]);
+        for(int i = 0; i < amount; i++){
+            String[] list_tmp = list[i].split("\\|", -1);
+            int in_game = Integer.valueOf(list_tmp[2]) - (list[i].split("\\|",-1).length - 3);
+            b_rooms[i] = new Button(list_tmp[0]);
             b_rooms[i].setLayoutX(320);
             b_rooms[i].setLayoutY(100 + i * 30);
-            b_rooms[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 260px;");
-        }
+            b_rooms[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 220px;");
 
+            l_rooms[i] = new Button(String.valueOf(in_game) + "/" + String.valueOf(Integer.valueOf(list_tmp[1]) + Integer.valueOf(list_tmp[2])));
+            l_rooms[i].setLayoutX(540);
+            l_rooms[i].setLayoutY(100 + i * 30);
+            l_rooms[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 40px;");
+        }
 
         /**********ROOT OPERATIONS**********/
         root.roomMenuSlider = new Group();
-        for(int i = 0; i < amount; i++)
+        for(int i = 0; i < amount; i++) {
             root.roomMenuSlider.getChildren().add(b_rooms[i]);
+            root.roomMenuSlider.getChildren().add(l_rooms[i]);
+        }
         root.menuElements.getChildren().add(root.roomMenuSlider);
 
     }

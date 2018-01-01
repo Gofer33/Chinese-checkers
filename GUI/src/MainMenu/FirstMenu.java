@@ -111,7 +111,7 @@ public class FirstMenu {
                 int tmp = connectionManager.makeConnection(tf_connect.getText());
 
                 if (tmp == 0) {
-                    connectionManager.test();
+                //    connectionManager.test();
                     t_error.setText("");
                     //TO DO SINGLETON MOVE
                     Move m = new Move(root.menuElements, Move.Dir.LEFT, 300, 5);
