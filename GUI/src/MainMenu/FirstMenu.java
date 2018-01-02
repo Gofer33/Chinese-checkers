@@ -108,6 +108,7 @@ public class FirstMenu {
         b_connect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+
                 int tmp = connectionManager.makeConnection(tf_connect.getText());
 
                 if (tmp == 0) {
@@ -116,6 +117,7 @@ public class FirstMenu {
                     //TO DO SINGLETON MOVE
                     Move m = new Move(root.menuElements, Move.Dir.LEFT, 300, 5);
                     m.start();
+                    RoomMenuHeader roomMenuHeader = new RoomMenuHeader(root, connectionManager);
                     RoomMenuSlider roomMenuSlider = new RoomMenuSlider(root, connectionManager);
                     CreateRoomMenu createRoomMenu = new CreateRoomMenu(root, connectionManager);
                 }

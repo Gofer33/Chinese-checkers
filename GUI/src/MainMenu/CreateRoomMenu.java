@@ -102,7 +102,23 @@ public class CreateRoomMenu {
             public void handle(MouseEvent e) {
                 if(tf_room_name.getText().length() > 1) {
                     connectionManager.createRoom(tf_room_name.getText());
+                    connectionManager.changeName(connectionManager.menuData.nickname);
+                    connectionManager.getRooms();
+                    connectionManager.joinRoom(tf_room_name.getText());
+                    connectionManager.menuData.players[0] = connectionManager.menuData.nickname;
+
+                    Refresh refresh = new Refresh(b_state, connectionManager);
+                    refresh.start();
+
+                    for(int i = 0; i < 6; i++){
+                        if(connectionManager.menuData.players[i] != "*")
+                            b_state[i].setText(connectionManager.menuData.players[i]);
+                        else{
+                            b_state[i].setText("Waiting...");
+                        }
+                    }
                     createRoom();
+                    connectionManager.start();
                 }
             }
         });
@@ -127,8 +143,8 @@ public class CreateRoomMenu {
         /**********ROOT OPERATIONS**********/
         root.roomMenuHeader = new Group(t_room_name, t_players, b_create, b_start, b_exit, tf_room_name,
                 b_state[0], b_state[1], b_state[2], b_state[3], b_state[4], b_state[5],
-                b_bot[0], b_bot[1], b_bot[2], b_bot[3], b_bot[4], b_bot[5],
-                b_close[0], b_close[1], b_close[2], b_close[3], b_close[4], b_close[5]);
+                b_bot[1], b_bot[2], b_bot[3], b_bot[4], b_bot[5],
+                b_close[1], b_close[2], b_close[3], b_close[4], b_close[5]);
         root.menuElements.getChildren().add(root.roomMenuHeader);
     }
 

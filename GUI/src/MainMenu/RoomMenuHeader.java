@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Random;
+
 import javafx.scene.image.ImageView;
 
 import javafx.scene.image.Image;
@@ -27,7 +29,7 @@ import javafx.event.EventHandler;
 
 public class RoomMenuHeader {
 
-    public RoomMenuHeader(GroupContainer root, ConnectionManager connectionManager) throws FileNotFoundException {
+    public RoomMenuHeader(GroupContainer root, ConnectionManager connectionManager) {
 
         /**********DECLARATIONS**********/
         Text t_nickname;
@@ -59,7 +61,8 @@ public class RoomMenuHeader {
 
         /**********BUTTONS**********/
         b_create_room = new Button("Create room");
-        tf_nickname = new TextField();
+        Random random = new Random();
+        tf_nickname = new TextField("Player: " + String.valueOf(random.nextInt(10000)));
 
         //Setting positions
         b_create_room.setLayoutX(320);
@@ -75,10 +78,20 @@ public class RoomMenuHeader {
         b_create_room.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                //TO DO SINGLETON MOVE
-                Move m = new Move(root.menuElements, Move.Dir.LEFT, 300, 5);
-                m.start();
-                System.out.println("Change state222");
+                if(tf_nickname.getText() != "") {
+                    connectionManager.menuData.nickname = tf_nickname.getText();
+                    //TO DO SINGLETON MOVE
+                    Move m = new Move(root.menuElements, Move.Dir.LEFT, 300, 5);
+                    m.start();
+                    System.out.println("Change state222");
+                }
+            }
+        });
+        tf_nickname.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if(tf_nickname.getText().contains("Player"))
+                    tf_nickname.setText("");
             }
         });
 

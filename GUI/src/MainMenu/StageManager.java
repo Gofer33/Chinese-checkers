@@ -31,9 +31,7 @@ public class StageManager extends Application {
 
         //Create menu objects
         ConnectionManager connectionManager = new ConnectionManager();
-    //    connectionManager.makeConnection("127.0.0.1");
         FirstMenu firstMenu = new FirstMenu(root, connectionManager);
-        RoomMenuHeader roomMenuHeader = new RoomMenuHeader(root, connectionManager);
 
 
         //Adding scene to the stage
