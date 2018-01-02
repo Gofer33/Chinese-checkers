@@ -18,6 +18,8 @@ public class Game {
     boolean roomFull;
     String botsNames[] = {"Bot George", "Bot Tom", "Bot Kevin", "Bot Paul", "Bot Oliver"};
     ArrayList<Player> winners = new ArrayList<Player>();
+    int bots=0;
+    int limit=6;
 
     public Game (int humanPlayers, int AIPlayers, String tableName)
     {
@@ -32,6 +34,19 @@ public class Game {
         addBots(AIPlayers);
     }
 
+    public Game (String tableName)
+    {
+        this.AIPlayers = 0;
+        this.humanPlayers = 0;
+        this.tableName = tableName;
+        players = new ArrayList<Player>();
+        this.turn = new TurnManager(players);
+        playersNumber = 0;
+        isStarted = false;
+        roomFull = false;
+        int limit = 6;
+    }
+
     public void addWinner(Player player)
     {
         winners.add(player);
@@ -44,23 +59,41 @@ public class Game {
             this.addPlayer(bot);
         }
     }
+
+    public String addBot()
+    {
+        String name = botsNames[bots];
+        AIPlayer bot = new AIPlayer(botsNames[bots], this.tableName);
+        this.addPlayer(bot);
+        bots++;
+        return name;
+    }
     public void addPlayer(Player player)
     {
-        players.add(player);
+        if(player instanceof AIPlayer)
+            AIPlayers ++;
+        else
+            humanPlayers ++;
 
-        if(players.size() == (playersNumber))
-            roomFull = true;
+        players.add(player);
+        limit--;
     }
     public void removePlayer(Player player)
     {
+        if(player instanceof AIPlayer)
+            AIPlayers --;
+        else
+            humanPlayers --;
+
         players.remove(player);
+        limit++;
     }
 
 
     public void start ()
     {
         Collections.shuffle(players, new Random(System.currentTimeMillis()));
-        board.initialize(playersNumber);
+        board.initialize(players.size());
     if(playersNumber == 2)
     {
         players.get(0).setMark('Y');

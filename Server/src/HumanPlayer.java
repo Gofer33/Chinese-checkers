@@ -22,6 +22,7 @@ public class HumanPlayer extends Thread implements Player {
     String roomName;
     Piece recentPiece;
     boolean win = false;
+    boolean admin = false;
 
     public HumanPlayer(Socket socket) {
         this.socket = socket;
@@ -52,7 +53,7 @@ public class HumanPlayer extends Thread implements Player {
                 //new room
                 if (line.charAt(0) == 'N') {
 
-                    int humanPlayers = line.charAt(1) - '0';
+                    /*int humanPlayers = line.charAt(1) - '0';
                     int AIPlayers = line.charAt(2) - '0';
                     String tableName = line.substring(3);
 
@@ -75,12 +76,69 @@ public class HumanPlayer extends Thread implements Player {
                         break;
                     }
                     else
-                        System.out.println("NEW GAME CREATED [humanPlayers] = " + humanPlayers + " [AIPlayers] = " + AIPlayers + " [Name] = " + tableName );
+                        System.out.println("NEW GAME CREATED [humanPlayers] = " + humanPlayers + " [AIPlayers] = " + AIPlayers + " [Name] = " + tableName );*/
+                    String tableName = line.substring(1);
+                    boolean fail = false;
+                    for(int i=0;i<GamesManager.getInstance().games.size();i++)
+                    {
+                        if(GamesManager.getInstance().games.get(i).getTableName().equals(tableName))
+                        {
+                            fail = true;
+                            break;
+                        }
+                    }
+                    if(fail)
+                    {
+                        displayErrorMsg(output,"Can't create that game!");
+                        break;
+                    }
+                    else {
+                        Game game = new Game(tableName);
+                        //game.addPlayer(this);
+                        admin = true;
+                        GamesManager.getInstance().games.add(game);
+                        this.roomName = tableName;
+                    }
+
+                }
+                else if (line.charAt(0) == 'G') {
+                    if(admin) {
+                        if(startGame(roomName) == 0)
+                        {
+                            displayErrorMsg(output, "Wrong ammount of players!");
+                            System.out.println("Wrong ammount of players!");
+                        }
+                        else
+                        {
+                            updateMSG("Game Started");
+                        }
+                    }
+                    else
+                        displayErrorMsg(output,"You are not admin!");
+
                 }
                 // show games with players
                 else if (line.charAt(0) == 'A') {
                     System.out.println("AAAAAA!@#@!@#!@#");
                     sendOutput();
+                }
+                //add new bot
+                else if(line.charAt(0) == 'B')
+                {
+                    if(admin) {
+                        if (GamesManager.getInstance().getGameByName(roomName).limit <= 0) {
+                            displayErrorMsg(output, "Cant add new bot!");
+                            System.out.println("Cant add new bot!");
+                            //break;
+                        } else {
+                            String botName = GamesManager.getInstance().getGameByName(roomName).addBot();
+                            System.out.println("BOT ADDED");
+                            updateAfterEnteringGame(botName);
+                        }
+                    }
+                    else
+                        displayErrorMsg(output, "You have no rights to do this!");
+                    System.out.println("limit is = " + GamesManager.getInstance().getGameByName(roomName).limit);
                 }
                 else if (line.charAt(0) == 'K') {
                     onlyJump = false;
@@ -173,6 +231,51 @@ public class HumanPlayer extends Thread implements Player {
                 else if (line.charAt(0) == 'R') {
                     GamesManager.getInstance().getGameByName(roomName).removePlayer(this);
                     System.out.println(name + "removed from " + roomName + " room!");
+                    updateAfterLeavingGame(this.name);
+
+                }
+                else if (line.charAt(0) == 'Z') {
+                    if(admin) {
+                        GamesManager.getInstance().getGameByName(roomName).limit--;
+                        updateMSG("Slot Removed");
+                    }
+                    else
+                        output.println("You have no rights!");
+                }
+                else if (line.charAt(0) == 'C') {
+                    if(admin) {
+                        GamesManager.getInstance().getGameByName(roomName).limit++;
+                        updateMSG("Slot Added");
+                    }
+                    else
+                        output.println("You have no rights!");
+
+
+                }
+                else if(line.charAt(0) == 'T')
+                {
+                    if(admin) {
+                        String n = line.substring(1);
+                        Player p = null;
+                        int success = 0;
+                        for(int i=0;i<GamesManager.getInstance().getGameByName(roomName).players.size();i++)
+                        {
+                            if(GamesManager.getInstance().getGameByName(roomName).players.get(i).getName_().equals(n)) {
+                                p = GamesManager.getInstance().getGameByName(roomName).players.get(i);
+                                success = 1;
+                                break;
+                            }
+                        }
+                        if(success == 1) {
+                            GamesManager.getInstance().getGameByName(roomName).limit++;
+                            GamesManager.getInstance().getGameByName(roomName).removePlayer(p);
+                            updateMSG(p.getName_() + " Removed!");
+                        }
+                        else
+                            displayErrorMsg(output,"Couldn't remove that player");
+                    }
+                    else
+                        output.println("You have no rights!");
                 }
 
                 // DEBUGGING
@@ -214,19 +317,21 @@ public class HumanPlayer extends Thread implements Player {
                     // remember room name
                     this.roomName = line.substring(1);
                     //preventing entering twice into same room
-                    if (!GamesManager.getInstance().getGameByName(roomName).players.contains(this))
+                    if (!GamesManager.getInstance().getGameByName(roomName).players.contains(this) && GamesManager.getInstance().getGameByName(roomName).limit > 0) {
                         GamesManager.getInstance().getGameByName(roomName).addPlayer(this);
+                        updateAfterEnteringGame(this.name);
+                    }
                     else {
-                        displayErrorMsg(output, "You already are in this room!");
-                        break;
+                        displayErrorMsg(output, "You can't join that room!");
+                        System.out.println("fail joing room");
+                       // break;
                     }
 
-                    if (GamesManager.getInstance().getGameByName(roomName).isFull()) {
-                        startGame(roomName);
-                    }
+                    System.out.println("LIMIT IS = " +  GamesManager.getInstance().getGameByName(roomName).limit);
                 }
                 else
                 {
+                    System.out.println("Wrong command!");
                     displayErrorMsg(output, "Wrong command!");
                 }
             }
@@ -242,6 +347,37 @@ public class HumanPlayer extends Thread implements Player {
 
         }catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateMSG(String msg)
+    {
+        for (int i=0; i <GamesManager.getInstance().getGameByName(roomName).players.size(); i++)
+        {
+            if (GamesManager.getInstance().getGameByName(roomName).players.get(i) instanceof HumanPlayer) {
+                GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println(msg);
+            }
+        }
+    }
+
+
+    private void updateAfterLeavingGame(String name)
+    {
+        for (int i=0; i <GamesManager.getInstance().getGameByName(roomName).players.size(); i++)
+        {
+            if (GamesManager.getInstance().getGameByName(roomName).players.get(i) instanceof HumanPlayer) {
+                GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println("PLAYER " + name + " LEFT THE ROOM");
+            }
+        }
+    }
+
+    private void updateAfterEnteringGame(String namestr)
+    {
+        for (int i=0; i <GamesManager.getInstance().getGameByName(roomName).players.size(); i++)
+        {
+            if (GamesManager.getInstance().getGameByName(roomName).players.get(i) instanceof HumanPlayer) {
+                GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println("PLAYER " + namestr + " ENTERED THE ROOM");
+            }
         }
     }
 
@@ -289,11 +425,17 @@ public class HumanPlayer extends Thread implements Player {
                 GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println("U" + msg);
     }
 
-    private void startGame(String tableName)
+    private int startGame(String tableName)
     {
+        int size = GamesManager.getInstance().getGameByName(roomName).players.size();
+        if(size <= 1 || size > 6 || size == 5)
+        {
+            return 0;
+        }
         System.out.println("Starting game: " + roomName);
         GamesManager.getInstance().getGameByName(roomName).start();
         GamesManager.getInstance().getGameByName(roomName).turn.resetTurn();
+        return 1;
     }
 
     private void displayErrorMsg(PrintStream output, String msg)
@@ -306,7 +448,7 @@ public class HumanPlayer extends Thread implements Player {
         for(int i=0;i<GamesManager.getInstance().games.size();i++)
         {
             // that name exists
-            if(GamesManager.getInstance().games.get(i).getTableName() == tableName)
+            if(GamesManager.getInstance().games.get(i).getTableName().equals(tableName))
                 return 0;
         }
         //create new table
