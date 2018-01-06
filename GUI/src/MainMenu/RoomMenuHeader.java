@@ -35,6 +35,7 @@ public class RoomMenuHeader {
         Text t_nickname;
         Text t_rooms;
         Button b_create_room;
+        Button b_set_name;
         TextField tf_nickname;
 
         /**********TEXTS**********/
@@ -61,20 +62,25 @@ public class RoomMenuHeader {
 
         /**********BUTTONS**********/
         b_create_room = new Button("Create room");
+        b_set_name = new Button("Set");
         Random random = new Random();
         tf_nickname = new TextField("Player: " + String.valueOf(random.nextInt(10000)));
 
         //Setting positions
         b_create_room.setLayoutX(320);
         b_create_room.setLayoutY(360);
+        b_set_name.setLayoutX(520);
+        b_set_name.setLayoutY(40);
         tf_nickname.setLayoutX(320);
         tf_nickname.setLayoutY(40);
 
         //Setting style
         b_create_room.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 260px;");
+        b_set_name.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 60px;");
         tf_nickname.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 180px;");
 
         //Setting handlers
+        connectionManager.menuData.nickname = tf_nickname.getText();
         b_create_room.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -83,7 +89,14 @@ public class RoomMenuHeader {
                     //TO DO SINGLETON MOVE
                     Move m = new Move(root.menuElements, Move.Dir.LEFT, 300, 5);
                     m.start();
-                    System.out.println("Change state222");
+                }
+            }
+        });
+        b_set_name.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if(tf_nickname.getText() != "") {
+                    connectionManager.menuData.nickname = tf_nickname.getText();
                 }
             }
         });
@@ -96,7 +109,7 @@ public class RoomMenuHeader {
         });
 
         /**********ROOT OPERATIONS**********/
-        root.roomMenuHeader = new Group(t_nickname, t_rooms, b_create_room, tf_nickname);
+        root.roomMenuHeader = new Group(t_nickname, t_rooms, b_create_room, b_set_name, tf_nickname);
         root.menuElements.getChildren().add(root.roomMenuHeader);
     }
 }

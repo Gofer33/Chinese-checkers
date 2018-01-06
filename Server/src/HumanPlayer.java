@@ -269,7 +269,7 @@ public class HumanPlayer extends Thread implements Player {
                         if(success == 1) {
                             GamesManager.getInstance().getGameByName(roomName).limit++;
                             GamesManager.getInstance().getGameByName(roomName).removePlayer(p);
-                            updateMSG(p.getName_() + " Removed!");
+                            updateMSG("R" + p.getName_());
                         }
                         else
                             displayErrorMsg(output,"Couldn't remove that player");

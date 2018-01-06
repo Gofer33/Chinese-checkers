@@ -15,15 +15,17 @@ public class ConnectionManager extends Thread{
     private String input_data = new String();
     public MenuData menuData = null;
     private boolean readt_to_use = false;
+    private Refresh refresh;
 
     class MenuData{
         boolean refresh = false;
         String nickname = null;
         String players[] = new String[6];
+        int place = 0;
 
         MenuData(){
             for(int i = 0; i < 6; i++){
-                players[i] = new String("*");
+                players[i] = "*";
             }
         }
     }
@@ -35,6 +37,10 @@ public class ConnectionManager extends Thread{
     ConnectionManager(){
 
         menuData = new MenuData();
+    }
+
+    public void setRefresh(Refresh refresh){
+        this.refresh = refresh;
     }
 
     int makeConnection(String IP) {
@@ -65,8 +71,6 @@ public class ConnectionManager extends Thread{
         }
         System.out.println(response);
 
-        out.println("EPokooj");
-        out.println("Siwegh");
         return response;
     }
 
@@ -82,22 +86,46 @@ public class ConnectionManager extends Thread{
         out.println("S" + name);
     }
 
+    public void addBot() { out.println("B"); }
+
+    public void closeSlot() { out.println("C"); }
+
+    public void kickPlayer(String name) { out.println("T" + name); }
+
+    public void startGame() { out.println("G"); }
+
     public void run() {
         while (true) {
-            System.out.println("AAAAAA");
             if(readt_to_use) {
                 try {
                     input_data = in.readLine();
                     System.out.println(input_data);
                     if(input_data.charAt(0) == 'P'){
-                        for(int i = 1; i < 6; i++){
-                            if(menuData.players[i] == "*") {
-                                menuData.players[i] = input_data.substring(1);
+                        if(menuData.place == 0) {
+                            for (int i = 0; i < 6; i++) {
+                                if (menuData.players[i] == "*") {
+                                    menuData.players[i] = input_data.substring(1);
+                                    refresh.makeRefresh();
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            menuData.players[menuData.place] = input_data.substring(1);
+                            menuData.place = 0;
+                            refresh.makeRefresh();
+                        }
+                    }
+                    if(input_data.charAt(0) == 'R'){
+                        for(int i = 0; i < 6; i++){
+                            System.out.println("Wyrzuc: " + input_data.substring(1));
+                            if(menuData.players[i].equals(input_data.substring(1))) {
+                                menuData.players[i] = "*";
+                                refresh.makeRefresh();
                                 break;
                             }
                         }
                     }
-                    //        menuData.refresh = true;
                 } catch (IOException e) {
                     System.out.println(e);
                 }

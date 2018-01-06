@@ -1,5 +1,6 @@
 package MainMenu;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 
@@ -9,19 +10,37 @@ import java.util.concurrent.TimeUnit;
  * Created by Kamil on 2017-12-27.
  */
 public class Refresh extends Thread {
-    Button button[] = new Button[6];
+    Button b_nick[];
+    Button b_bot[];
+    Button b_close[];
+    Button b_kick[];
     ConnectionManager connectionManager;
 
-    public Refresh(Button button[], ConnectionManager connectionManager){
-        this.button = button;
+    public Refresh(Button b_nick[], Button b_bot[], Button b_close[], Button b_kick[], ConnectionManager connectionManager) {
+        this.b_nick = b_nick;
+        this.b_bot = b_bot;
+        this.b_close = b_close;
+        this.b_kick = b_kick;
         this.connectionManager = connectionManager;
     }
 
-    public void run(){
-        while(true) {
-            for (int i = 0; i < 6; i++) {
-                button[i].setText(connectionManager.menuData.players[i]);
+    public void makeRefresh() {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                for(int i = 0; i < 6; i++){
+                    b_nick[i].setText(connectionManager.menuData.players[i]);
+                    if(connectionManager.menuData.players[i] != "*" && i > 0){
+                        b_kick[i].setLayoutX(795);
+                        b_bot[i].setLayoutX(1095);
+                        b_close[i].setLayoutX(1135);
+                    }
+                    if(connectionManager.menuData.players[i] == "*" && i > 0){
+                        b_kick[i].setLayoutX(1095);
+                        b_bot[i].setLayoutX(795);
+                        b_close[i].setLayoutX(835);
+                    }
+                }
             }
-        }
+        });
     }
 }

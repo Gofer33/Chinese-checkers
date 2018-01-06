@@ -70,6 +70,18 @@ public class RoomMenuSlider {
             l_rooms[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 40px;");
         }
 
+        //Setting handlers
+        for(int i = 0; i < amount; i++) {
+            final int counter = i;
+            b_rooms[i].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    connectionManager.changeName(connectionManager.menuData.nickname);
+                    connectionManager.joinRoom(b_rooms[counter].getText());
+                }
+            });
+        }
+
         /**********ROOT OPERATIONS**********/
         root.roomMenuSlider = new Group();
         for(int i = 0; i < amount; i++) {
