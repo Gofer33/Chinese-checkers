@@ -1,5 +1,6 @@
 package MainMenu;
 
+import Game.MapDisplay;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ public class Refresh extends Thread {
     Button b_close[];
     Button b_kick[];
     ConnectionManager connectionManager;
+    MapDisplay mapDisplay;
 
     public Refresh(Button b_nick[], Button b_bot[], Button b_close[], Button b_kick[], ConnectionManager connectionManager) {
         this.b_nick = b_nick;
@@ -42,5 +44,14 @@ public class Refresh extends Thread {
                 }
             }
         });
+    }
+
+    public void updateRefresh(MapDisplay mapDisplay){
+        this.mapDisplay = mapDisplay;
+    }
+
+    public void makeMapRefresh(String pos){
+        this.mapDisplay.pawn[13][10].setType('Y');
+        this.mapDisplay.pawn[12][4].setType('Y');
     }
 }

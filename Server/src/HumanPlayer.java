@@ -162,14 +162,19 @@ public class HumanPlayer extends Thread implements Player {
                                 } else
                                     status = 0;
                             } else {
-                                for (int i = 0; i < pieces.size(); i++) {
-                                    if (oldX == pieces.get(i).getX() && oldY == pieces.get(i).getY()) {
-                                        status = GamesManager.getInstance().getGameByName(roomName).board.move(pieces.get(i), newX, newY, this.mark, onlyJump);
-                                        if (status == 2) {
-                                            recentPiece = pieces.get(i);
-                                            onlyJump = true;
+                                try {
+                                    for (int i = 0; i < pieces.size(); i++) {
+                                        if (oldX == pieces.get(i).getX() && oldY == pieces.get(i).getY()) {
+                                            status = GamesManager.getInstance().getGameByName(roomName).board.move(pieces.get(i), newX, newY, this.mark, onlyJump);
+                                            if (status == 2) {
+                                                recentPiece = pieces.get(i);
+                                                onlyJump = true;
+                                            }
                                         }
                                     }
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
                                 }
                             }
                         //update if move performed

@@ -94,6 +94,8 @@ public class ConnectionManager extends Thread{
 
     public void startGame() { out.println("G"); }
 
+    public void makeMove(String pos) { out.println("M" + pos); }
+
     public void run() {
         while (true) {
             if(readt_to_use) {
@@ -125,6 +127,9 @@ public class ConnectionManager extends Thread{
                                 break;
                             }
                         }
+                    }
+                    if(input_data.charAt(0) == 'U'){
+                        refresh.makeMapRefresh(input_data.substring(1));
                     }
                 } catch (IOException e) {
                     System.out.println(e);

@@ -102,8 +102,8 @@ public class CreateRoomMenu {
             b_kick[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 85px;");
         }
         tf_room_name.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 180px;");
-
         //Setting handlers
+        Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager);
         b_create.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -115,7 +115,7 @@ public class CreateRoomMenu {
                     connectionManager.joinRoom(tf_room_name.getText());
 
 
-                    Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager);
+
                     connectionManager.setRefresh(refresh);
 
                     createRoom();
@@ -127,7 +127,9 @@ public class CreateRoomMenu {
             @Override
             public void handle(MouseEvent e) {
                 //TO DO SINGLETON MOVE
-                Game game = new Game();
+                Game game = new Game(connectionManager);
+                refresh.updateRefresh(game.mapDisplay);
+                connectionManager.startGame();
             }
         });
         b_exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

@@ -14,11 +14,11 @@ public class Pawn {
     //    symbol.setText("" + type);
     }
 
-    char getType(){
+    public char getType(){
         return type;
     }
 
-    void setType (char type){
+    public void setType (char type){
         this.type = type;
     //    symbol.setText("" + type);
         String tmp = "-fx-background-radius: 5em; " +

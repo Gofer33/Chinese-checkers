@@ -1,5 +1,6 @@
 package Game;
 
+import MainMenu.ConnectionManager;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -15,7 +16,8 @@ import java.io.FileNotFoundException;
  */
 
 public class Game {
-    public Game(){
+    public MapDisplay mapDisplay;
+    public Game(ConnectionManager connectionManager){
 
         /**********DECLARATIONS**********/
         Stage stage;
@@ -49,7 +51,7 @@ public class Game {
         Scene mainScene = new Scene(root.mainRoot, 600, 600);
         mainScene.setFill(Color.BLUE);
 
-        MapDisplay mapDisplay = new MapDisplay(root);
+        mapDisplay = new MapDisplay(root, connectionManager);
         mapDisplay.run();
 
 
