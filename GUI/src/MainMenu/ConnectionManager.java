@@ -106,6 +106,8 @@ public class ConnectionManager extends Thread{
 
     public void exitRoom() { out.println("R"); }
 
+    public void nextTurn() { out.println("K"); }
+
     public void run() {
         while (true) {
             if(readt_to_use) {

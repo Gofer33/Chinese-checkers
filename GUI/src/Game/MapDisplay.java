@@ -5,6 +5,7 @@ import MainMenu.Move;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,7 @@ public class MapDisplay extends Thread {
     int posY2 = 0;
     char color = '#';
     ConnectionManager connectionManager;
+    Button b_turn = new Button("Next Turn");
 
     MapDisplay(GroupContainer root, ConnectionManager connectionManager){
 
@@ -40,8 +42,20 @@ public class MapDisplay extends Thread {
                 }
             }
         }
+        b_turn.setLayoutX(480);
+        b_turn.setLayoutY(520);
+        //Setting style
+        b_turn.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 100px; -fx-pref-height: 60px;");
+        //Setting handlers
+        b_turn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                connectionManager.nextTurn();
+            }
+        });
 
         /**********ROOT OPERATIONS**********/
+        root.mainRoot.getChildren().add(b_turn);
         root.mainRoot.getChildren().add(root.board);
         root.mainRoot.getChildren().add(root.pawns);
     }
