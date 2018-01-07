@@ -184,12 +184,12 @@ public class CreateRoomMenu {
 
 
         /**********ROOT OPERATIONS**********/
-        root.roomMenuHeader = new Group(t_room_name, t_players, b_create, b_start, b_exit, tf_room_name,
+        root.createRoomMenu = new Group(t_room_name, t_players, b_create, b_start, b_exit, tf_room_name,
                 b_state[0], b_state[1], b_state[2], b_state[3], b_state[4], b_state[5],
                 b_bot[1], b_bot[2], b_bot[3], b_bot[4], b_bot[5],
                 b_close[1], b_close[2], b_close[3], b_close[4], b_close[5],
                 b_kick[0], b_kick[1], b_kick[2], b_kick[3], b_kick[4], b_kick[5]);
-        root.menuElements.getChildren().add(root.roomMenuHeader);
+        root.menuElements.getChildren().add(root.createRoomMenu);
     }
 
     private void createRoom(){

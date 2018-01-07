@@ -377,7 +377,7 @@ public class HumanPlayer extends Thread implements Player {
         for (int i=0; i <GamesManager.getInstance().getGameByName(roomName).players.size(); i++)
         {
             if (GamesManager.getInstance().getGameByName(roomName).players.get(i) instanceof HumanPlayer) {
-                GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println("PLAYER " + name + " LEFT THE ROOM");
+                GamesManager.getInstance().getGameByName(roomName).players.get(i).getOutput().println("V" + name);
             }
         }
     }

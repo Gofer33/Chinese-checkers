@@ -104,6 +104,8 @@ public class ConnectionManager extends Thread{
 
     public void requestColor() { out.println("O"); }
 
+    public void exitRoom() { out.println("R"); }
+
     public void run() {
         while (true) {
             if(readt_to_use) {
@@ -126,7 +128,7 @@ public class ConnectionManager extends Thread{
                             refresh.makeRefresh();
                         }
                     }
-                    if(input_data.charAt(0) == 'R'){
+                    if(input_data.charAt(0) == 'R' || input_data.charAt(0) == 'V'){
                         for(int i = 0; i < 6; i++){
                             System.out.println("Wyrzuc: " + input_data.substring(1));
                             if(menuData.players[i].equals(input_data.substring(1))) {

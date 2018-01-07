@@ -80,29 +80,29 @@ public class MapDisplay extends Thread {
                                 color = '#';
                                 String output = "";
 
-                                if(String.valueOf(posX1).length() < 2){
-                                    output = "0" + String.valueOf(posX1);
-                                }
-                                else{
-                                    output = String.valueOf(posX1);
-                                }
                                 if(String.valueOf(posY1).length() < 2){
-                                    output += "0" + String.valueOf(posY1);
+                                    output = "0" + String.valueOf(posY1);
                                 }
                                 else{
-                                    output += String.valueOf(posY1);
+                                    output = String.valueOf(posY1);
                                 }
-                                if(String.valueOf(counterX).length() < 2){
-                                    output += "0" + String.valueOf(counterX);
+                                if(String.valueOf(posX1).length() < 2){
+                                    output += "0" + String.valueOf(posX1);
                                 }
                                 else{
-                                    output += String.valueOf(counterX);
+                                    output += String.valueOf(posX1);
                                 }
                                 if(String.valueOf(counterY).length() < 2){
                                     output += "0" + String.valueOf(counterY);
                                 }
                                 else{
                                     output += String.valueOf(counterY);
+                                }
+                                if(String.valueOf(counterX).length() < 2){
+                                    output += "0" + String.valueOf(counterX);
+                                }
+                                else{
+                                    output += String.valueOf(counterX);
                                 }
 
                                 posX1 = 0;
