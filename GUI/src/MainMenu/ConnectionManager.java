@@ -16,12 +16,14 @@ public class ConnectionManager extends Thread{
     public MenuData menuData = null;
     private boolean readt_to_use = false;
     private Refresh refresh;
+    public boolean waiter = true;
 
     class MenuData{
         boolean refresh = false;
         String nickname = null;
         String players[] = new String[6];
         int place = 0;
+        char color = '#';
 
         MenuData(){
             for(int i = 0; i < 6; i++){
@@ -74,6 +76,10 @@ public class ConnectionManager extends Thread{
         return response;
     }
 
+    public char getColor(){
+        return menuData.color;
+    }
+
     public void createRoom(String name) {
         out.println("N" + name);
     }
@@ -95,6 +101,8 @@ public class ConnectionManager extends Thread{
     public void startGame() { out.println("G"); }
 
     public void makeMove(String pos) { out.println("M" + pos); }
+
+    public void requestColor() { out.println("O"); }
 
     public void run() {
         while (true) {
@@ -130,6 +138,11 @@ public class ConnectionManager extends Thread{
                     }
                     if(input_data.charAt(0) == 'U'){
                         refresh.makeMapRefresh(input_data.substring(1));
+                    }
+                    if(input_data.charAt(0) == 'O'){
+                        menuData.color = input_data.charAt(1);
+                        System.out.println("Chce: " + input_data.charAt(1) + " mam: " + menuData.color);
+                        waiter = false;
                     }
                 } catch (IOException e) {
                     System.out.println(e);

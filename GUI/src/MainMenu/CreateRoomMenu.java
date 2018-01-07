@@ -127,9 +127,11 @@ public class CreateRoomMenu {
             @Override
             public void handle(MouseEvent e) {
                 //TO DO SINGLETON MOVE
+
                 Game game = new Game(connectionManager);
                 refresh.updateRefresh(game.mapDisplay);
                 connectionManager.startGame();
+                System.out.println("XXX");
             }
         });
         b_exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

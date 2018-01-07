@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Damian Borek on 27/11/2017.
@@ -310,6 +311,11 @@ public class HumanPlayer extends Thread implements Player {
                 // set name
                 else if (line.charAt(0) == 'S') {
                     this.name = line.substring(1);
+                }
+                // get player name
+                else if (line.charAt(0) == 'O') {
+                        System.out.println("TEST123: " + this.getMark());
+                        output.println("O" + this.getMark());
                 }
                 // enter room
                 else if (line.charAt(0) == 'E') {

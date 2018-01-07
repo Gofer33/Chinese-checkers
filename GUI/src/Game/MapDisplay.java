@@ -2,9 +2,12 @@ package Game;
 
 import MainMenu.ConnectionManager;
 import MainMenu.Move;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Kamil on 2017-12-28.
@@ -44,6 +47,20 @@ public class MapDisplay extends Thread {
     }
 
     public void run(){
+        try {
+            while(connectionManager.getColor() == '#' || Character.getNumericValue(connectionManager.getColor()) == -1){
+                connectionManager.requestColor();
+                this.sleep(100);
+                System.out.println("CZEKAM " + connectionManager.getColor());
+            }
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        final char color2 = connectionManager.getColor();
+        System.out.println("MAM:" + color2 + "X");
+        System.out.println(Character.getNumericValue(color2));
+        this.connectionManager.waiter = true;
         for(int i = 0; i < 19; i++){
             for(int j = 0; j < 19; j++){
                 final int counterX = i;
@@ -52,14 +69,13 @@ public class MapDisplay extends Thread {
                     pawn[j][i].symbol.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent e) {
-                            if(posX1 == 0 && posY1 == 0){
+                            if(posX1 == 0 && posY1 == 0 && pawn[counterY][counterX].getType() == color2){
                                 posX1 = counterX;
                                 posY1 = counterY;
                                 color = pawn[counterY][counterX].getType();
+                                System.out.println("TO JEST: " + color2);
                             }
                             else{
-                                pawn[posY1][posX1].setType('#');
-                                pawn[counterY][counterX].setType(color);
                                 System.out.println(String.valueOf(posX1) + " " + String.valueOf(posY1) + " " + String.valueOf(counterX) + " " + String.valueOf(counterY));
                                 color = '#';
                                 String output = "";

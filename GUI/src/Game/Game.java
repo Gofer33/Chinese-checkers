@@ -52,7 +52,7 @@ public class Game {
         mainScene.setFill(Color.BLUE);
 
         mapDisplay = new MapDisplay(root, connectionManager);
-        mapDisplay.run();
+        mapDisplay.start();
 
 
 

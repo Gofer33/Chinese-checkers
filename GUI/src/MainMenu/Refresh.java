@@ -51,7 +51,15 @@ public class Refresh extends Thread {
     }
 
     public void makeMapRefresh(String pos){
-        this.mapDisplay.pawn[13][10].setType('Y');
-        this.mapDisplay.pawn[12][4].setType('Y');
+        int posX1 = Integer.valueOf(pos.substring(0,2));
+        int posY1 = Integer.valueOf(pos.substring(2,4));
+        int posX2 = Integer.valueOf(pos.substring(4,6));
+        int posY2 = Integer.valueOf(pos.substring(6,8));
+
+        System.out.println(posX1);
+        System.out.println(posY1);
+        char color = this.mapDisplay.pawn[posX1][posY1].getType();
+        this.mapDisplay.pawn[posX1][posY1].setType('#');
+        this.mapDisplay.pawn[posX2][posY2].setType(color);
     }
 }
