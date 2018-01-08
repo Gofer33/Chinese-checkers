@@ -38,10 +38,10 @@ public class Move extends Thread {
                         myGroup.setLayoutX(myGroup.getLayoutX() - value / 100);
                         break;
                     case DOWN:
-                        myGroup.setLayoutX(myGroup.getLayoutY() + value / 100);
+                        myGroup.setLayoutY(myGroup.getLayoutY() + value / 100);
                         break;
                     case UP:
-                        myGroup.setLayoutX(myGroup.getLayoutY() - value / 100);
+                        myGroup.setLayoutY(myGroup.getLayoutY() - value / 100);
                         break;
                 }
                 TimeUnit.MILLISECONDS.sleep(speed);

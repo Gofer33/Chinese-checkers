@@ -73,11 +73,16 @@ public class RoomMenuSlider {
         //Setting handlers
         for(int i = 0; i < amount; i++) {
             final int counter = i;
+            final int amo = amount;
             b_rooms[i].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
                     connectionManager.changeName(connectionManager.menuData.nickname);
                     connectionManager.joinRoom(b_rooms[counter].getText());
+                    JoinRoomMenu joinRoomMenu = new JoinRoomMenu(root, connectionManager, list[counter]);
+                    //TO DO SINGLETON MOVE
+                    Move m = new Move(root.menuElements, Move.Dir.UP, 400, 5);
+                    m.start();
                 }
             });
         }

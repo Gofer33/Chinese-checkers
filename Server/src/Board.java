@@ -236,7 +236,7 @@ public class Board {
     {
         int x = (oldX + newX)/2;
         int y = (oldY + newY)/2;
-        if(boardArray[x][y] != '#' || boardArray[x][y] != '.')
+        if(boardArray[x][y] != '#' && boardArray[x][y] != '.')
             return true;
         else return false;
     }

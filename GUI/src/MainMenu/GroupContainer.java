@@ -13,6 +13,7 @@ public class GroupContainer {
     Group roomMenuHeader;
     Group roomMenuSlider;
     Group createRoomMenu;
+    Group joinRoomMenu;
 
     GroupContainer(){
         mainRoot = new Group();
@@ -22,5 +23,6 @@ public class GroupContainer {
         roomMenuHeader = new Group();
         roomMenuSlider = new Group();
         createRoomMenu = new Group();
+        joinRoomMenu = new Group();
     }
 }

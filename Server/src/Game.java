@@ -94,25 +94,25 @@ public class Game {
     {
         Collections.shuffle(players, new Random(System.currentTimeMillis()));
         board.initialize(players.size());
-    if(playersNumber == 2)
+    if(players.size() == 2)
     {
         players.get(0).setMark('Y');
         players.get(1).setMark('R');
     }
-    else if(playersNumber == 3)
+    else if(players.size() == 3)
     {
         players.get(0).setMark('Y');
         players.get(1).setMark('P');
         players.get(2).setMark('B');
     }
-    else if(playersNumber == 4)
+    else if(players.size() == 4)
     {
         players.get(0).setMark('L');
         players.get(1).setMark('G');
         players.get(2).setMark('P');
         players.get(3).setMark('B');
     }
-    else if(playersNumber == 6)
+    else if(players.size() == 6)
     {
         players.get(0).setMark('Y');
         players.get(1).setMark('G');
