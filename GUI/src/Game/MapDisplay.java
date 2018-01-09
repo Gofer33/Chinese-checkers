@@ -65,7 +65,6 @@ public class MapDisplay extends Thread {
             while(connectionManager.getColor() == '#' || Character.getNumericValue(connectionManager.getColor()) == -1){
                 connectionManager.requestColor();
                 this.sleep(100);
-                System.out.println("CZEKAM " + connectionManager.getColor());
             }
         }
         catch (InterruptedException e){

@@ -50,7 +50,6 @@ public class RoomMenuSlider {
         b_rooms = new Button[amount];
         l_rooms = new Button[amount];
 
-        System.out.println(amount);
         String[] list = tmp.split("\\*",-1);
 
 
@@ -79,6 +78,7 @@ public class RoomMenuSlider {
                 public void handle(MouseEvent e) {
                     connectionManager.changeName(connectionManager.menuData.nickname);
                     connectionManager.joinRoom(b_rooms[counter].getText());
+                    connectionManager.start();
                     JoinRoomMenu joinRoomMenu = new JoinRoomMenu(root, connectionManager, list[counter]);
                     //TO DO SINGLETON MOVE
                     Move m = new Move(root.menuElements, Move.Dir.UP, 400, 5);

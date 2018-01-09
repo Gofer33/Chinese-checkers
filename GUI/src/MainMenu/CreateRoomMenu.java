@@ -103,14 +103,13 @@ public class CreateRoomMenu {
         }
         tf_room_name.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 180px;");
         //Setting handlers
-        Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager);
+        Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager, b_start);
         b_create.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 if(tf_room_name.getText().length() > 1) {
                     connectionManager.createRoom(tf_room_name.getText());
                     connectionManager.changeName(connectionManager.menuData.nickname);
-                    System.out.println("Imie: " + connectionManager.menuData.nickname);
                     connectionManager.getRooms();
                     connectionManager.joinRoom(tf_room_name.getText());
 
@@ -126,12 +125,16 @@ public class CreateRoomMenu {
         b_start.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                //TO DO SINGLETON MOVE
-
-                Game game = new Game(connectionManager);
-                refresh.updateRefresh(game.mapDisplay);
-                connectionManager.startGame();
-                System.out.println("XXX");
+                int amount_of_players = 0;
+                for(int i = 0; i < 6; i++){
+                    if(!(connectionManager.menuData.players[i] == "*") || !(connectionManager.menuData.players[i] == "."))
+                        amount_of_players++;
+                }
+                if(amount_of_players > 1 && amount_of_players != 5 && amount_of_players < 7) {
+                    Game game = new Game(connectionManager);
+                    refresh.updateRefresh(game);
+                    connectionManager.startGame();
+                }
             }
         });
         b_exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -160,6 +163,7 @@ public class CreateRoomMenu {
             b_close[i].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
+                    connectionManager.menuData.place = counter;
                     connectionManager.closeSlot();
                  /*   if (connectionManager.menuData.players[counter] == "*") {
                         b_kick[counter].setLayoutX(1095);
@@ -172,12 +176,13 @@ public class CreateRoomMenu {
             b_kick[i].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    connectionManager.kickPlayer(b_state[counter].getText());
-                 /*   if (connectionManager.menuData.players[counter] != "*") {
-                        b_kick[counter].setLayoutX(1095);
-                        b_bot[counter].setLayoutX(1095);
-                        b_close[counter].setLayoutX(1135);
-                    }*/
+                    if(b_state[counter].getText().equals("Slot Removed")){
+                        connectionManager.menuData.place = counter;
+                        connectionManager.addSlot();
+                    }
+                    else {
+                        connectionManager.kickPlayer(b_state[counter].getText());
+                    }
                 }
             });
         }

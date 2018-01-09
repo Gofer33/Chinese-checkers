@@ -1,7 +1,10 @@
 package MainMenu;
 
+import javafx.application.Platform;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.out;
 
@@ -66,12 +69,10 @@ public class ConnectionManager extends Thread{
         String response = "";
         try {
             response = in.readLine();
-            System.out.println(response);
         }
         catch(IOException e){
             System.out.println(e);
         }
-        System.out.println(response);
 
         return response;
     }
@@ -94,7 +95,9 @@ public class ConnectionManager extends Thread{
 
     public void addBot() { out.println("B"); }
 
-    public void closeSlot() { out.println("C"); }
+    public void closeSlot() { out.println("Z"); }
+
+    public void addSlot() { out.println("C"); }
 
     public void kickPlayer(String name) { out.println("T" + name); }
 
@@ -113,13 +116,17 @@ public class ConnectionManager extends Thread{
             if(readt_to_use) {
                 try {
                     input_data = in.readLine();
-                    System.out.println(input_data);
                     if(input_data.charAt(0) == 'P'){
                         if(menuData.place == 0) {
                             for (int i = 0; i < 6; i++) {
                                 if (menuData.players[i] == "*") {
                                     menuData.players[i] = input_data.substring(1);
-                                    refresh.makeRefresh();
+                                    try {
+                                        refresh.makeRefresh();
+                                    }
+                                    catch(Exception e){
+                                        e.getMessage();
+                                    }
                                     break;
                                 }
                             }
@@ -132,7 +139,6 @@ public class ConnectionManager extends Thread{
                     }
                     if(input_data.charAt(0) == 'R' || input_data.charAt(0) == 'V'){
                         for(int i = 0; i < 6; i++){
-                            System.out.println("Wyrzuc: " + input_data.substring(1));
                             if(menuData.players[i].equals(input_data.substring(1))) {
                                 menuData.players[i] = "*";
                                 refresh.makeRefresh();
@@ -140,12 +146,35 @@ public class ConnectionManager extends Thread{
                             }
                         }
                     }
+                    if(input_data.equals("Slot Removed")){
+                        menuData.players[menuData.place] = ".";
+                        menuData.place = 0;
+                        refresh.makeRefresh();
+                    }
+                    if(input_data.equals("Slot Added")){
+                        menuData.players[menuData.place] = "*";
+                        menuData.place = 0;
+                        refresh.makeRefresh();
+                    }
+                /*    if(input_data.equals("Game Started")){
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                refresh.createGame();
+                            }
+                        });
+                    }*/
                     if(input_data.charAt(0) == 'U'){
                         refresh.makeMapRefresh(input_data.substring(1));
+                        try{
+                        TimeUnit.MILLISECONDS.sleep(200);
+                        }
+                        catch(InterruptedException f) {
+
+                        }
                     }
                     if(input_data.charAt(0) == 'O'){
                         menuData.color = input_data.charAt(1);
-                        System.out.println("Chce: " + input_data.charAt(1) + " mam: " + menuData.color);
                         waiter = false;
                     }
                 } catch (IOException e) {

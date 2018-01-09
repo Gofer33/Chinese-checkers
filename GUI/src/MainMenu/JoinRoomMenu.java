@@ -32,7 +32,7 @@ public class JoinRoomMenu {
         TextField tf_room_name;
         String[] list_tmp = list.split("\\|", -1);
         int i_amount = list.split("\\|", -1).length - 3;
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + list + " " + String.valueOf(i_amount));
+        int i_p_amount = 6;
 
         /**********TEXTS**********/
         t_room_name = new Text();
@@ -73,7 +73,7 @@ public class JoinRoomMenu {
         //Setting positions
         b_exit.setLayoutX(320);
         b_exit.setLayoutY(750);
-        for(int i = 0; i < i_amount; i++){
+        for(int i = 0; i < i_p_amount; i++){
             b_state[i].setLayoutX(320);
             b_state[i].setLayoutY(500 + i * 30);
         }
@@ -82,12 +82,12 @@ public class JoinRoomMenu {
 
         //Setting style
         b_exit.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 60px;");
-        for(int i = 0; i < i_amount; i++){
+        for(int i = 0; i < i_p_amount; i++){
             b_state[i].setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 170px;");
         }
         tf_room_name.setStyle("-fx-background-color: rgba(200,200,200,0.6); -fx-text-fill: rgba(0,0,0,0.8); -fx-pref-width: 180px;");
         //Setting handlers
-        Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager);
+        Refresh refresh = new Refresh(b_state, b_bot, b_close, b_kick, connectionManager, b_start);
         b_exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -97,7 +97,6 @@ public class JoinRoomMenu {
                 m.start();
             }
         });
-
 
         /**********ROOT OPERATIONS**********/
         root.joinRoomMenu = new Group(t_room_name, t_players, b_exit, tf_room_name,
